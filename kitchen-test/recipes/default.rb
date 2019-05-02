@@ -17,7 +17,6 @@ end
 # creating remote file
 remote_file 'C:\Chef-output\index.html' do
   source 'https://github.com/PixelsCommander/Download-File-JS/blob/master/example/index.html'
-  checksum 'easf58e299'
   action :create
 end
 
