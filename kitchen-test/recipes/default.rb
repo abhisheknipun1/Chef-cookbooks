@@ -79,11 +79,13 @@ windows_package 'Sublime Text 1.4' do
   source 'C:\Sublime Text 1.4 Setup.exe'
 end
 
-#windows_package '7z 15.14 install' do
-#  action :install
-#  source 'http://www.7-zip.org/a/7z1514.msi'
-#end
+windows_package '7z 15.14 install' do
+  action :install
+  source 'http://www.7-zip.org/a/7z1514.msi'
+end
 
+=begin
+ 
 # install 7zip and add path
 seven_zip_tool '7z 15.14 install' do
   action    [:install, :add_to_path]
@@ -92,6 +94,8 @@ seven_zip_tool '7z 15.14 install' do
   source    'http://www.7-zip.org/a/7z1514.msi'
   checksum  'eaf58e29941d8ca95045946949d75d9b5455fac167df979a7f8e4a6bf2d39680'
 end
+
+=end
 
 # setting env path
 windows_path 'C:\Program Files\Git\cmd' do
