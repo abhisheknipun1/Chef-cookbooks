@@ -32,15 +32,15 @@ end
 # setting windows firewall rules
 windows_firewall_rule 'http' do
 	rule_name 'http 80'
-    local_port '80'
-    protocol 'TCP'
-    action :create
+    	local_port '80'
+    	protocol 'TCP'
+    	action :create
 end
 
 windows_firewall_rule 'http' do
-    local_port '80'
-    protocol 'TCP'
-    action :create
+    	local_port '80'
+    	protocol 'TCP'
+    	action :create
 	direction :outbound #outbound rule
 	firewall_action :allow
 end
