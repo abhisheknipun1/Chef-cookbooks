@@ -11,14 +11,14 @@ end
 
 
 file 'C:\Chef-output\demo.txt' do
-	content "Hello World!!"
+	content "This is maintained by Chef!!"
 end
 
 # creating remote file
-remote_file 'C:\Chef-output\index.html' do
-  source 'https://github.com/PixelsCommander/Download-File-JS/blob/master/example/index.html'
-  action :create
-end
+#remote_file 'C:\Chef-output\index.html' do
+#  source 'https://github.com/PixelsCommander/Download-File-JS/blob/master/example/index.html'
+#  action :create
+#end
 
 # Removing file
 file 'C:\demo.txt' do
@@ -64,9 +64,9 @@ remote_file 'C:\Git-2.21.0-64-bit.exe' do
 end
 
 # Removing old Git package
-#windows_package 'Git version 2.5.3' do
-#  action :remove
-#end
+windows_package 'Git version 2.5.3' do
+  action :remove
+end
 
 # installing package
 windows_package 'Git version 2.21.0' do
@@ -79,12 +79,15 @@ windows_package 'Sublime Text 1.4' do
   source 'C:\Sublime Text 1.4 Setup.exe'
 end
 
-windows_package '7z 15.14 install' do
+
+=begin # Block by Tesco to access this web page
+
+windows_package '7-Zip 15.14' do
   action :install
-  source 'http://www.7-zip.org/a/7z1514.msi'
+  source 'https://www.7-zip.org/a/7z1514.msi'
 end
 
-=begin
+
  
 # install 7zip and add path
 seven_zip_tool '7z 15.14 install' do
@@ -98,10 +101,15 @@ end
 =end
 
 # setting env path
+
 windows_path 'C:\Program Files\Git\cmd' do
   path 'C:\Program Files\Git\cmd' # default value: 'name' unless specified
   action :add # defaults to :add if not specified
 end
+
+# setting git env path using other cookbook - set-env-path
+
+#include_recipe 'set-env-path::default'
 
 # Removing package
 windows_package 'Sublime Text 1.4' do
@@ -121,10 +129,43 @@ windows_zipfile 'c:/Chef-output-unzip' do
   action :unzip
 end
 
+# running apache httpd service on windows
 
+remote_file 'C:\httpd-2.4.39-o102r-x64-vc14.zip' do
+	source 'https://www.apachehaus.com/downloads/httpd-2.4.39-o102r-x64-vc14.zip'
+	action :create
+end
 
+windows_zipfile 'C:\httpd-unzip' do
+  source 'C:\httpd-2.4.39-o102r-x64-vc14.zip'
+  action :unzip
+end
 
+template 'C:\script.bat' do
+  source 'kitchen-test.erb'
+end
 
+=begin
 
+file 'C:\script.bat' do
+	content "C:\n
+	cd C:\httpd-unzip\Apache24\bin\n
+	httpd.exe -k install -n 'apache_httpd'\n
+	httpd.exe -k start -n 'apache_httpd'\n"
+end
 
+=end
 
+windows_service 'apache_httpd' do
+	action :create
+	notifies :run, 'batch[run-script]', :immediately
+end
+
+windows_service 'apache_httpd' do
+	action :start
+end
+
+batch 'run-script' do
+   code 'script.bat'
+   action :nothing
+end
