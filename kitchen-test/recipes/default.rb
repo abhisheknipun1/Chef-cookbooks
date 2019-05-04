@@ -80,7 +80,7 @@ windows_package 'Sublime Text 1.4' do
 end
 
 
-=begin # Block by Tesco to access this web page
+=begin # Blocked access for this web page
 
 windows_package '7-Zip 15.14' do
   action :install
@@ -131,13 +131,14 @@ end
 
 # running apache httpd service on windows
 
-remote_file 'C:\httpd-2.4.39-o102r-x64-vc14.zip' do
-	source 'https://www.apachehaus.com/downloads/httpd-2.4.39-o102r-x64-vc14.zip'
+remote_file 'C:\httpd-2.4.39-win64-VC15.zip' do
+	source 'https://home.apache.org/~steffenal/VC15/binaries/httpd-2.4.39-win64-VC15.zip'
 	action :create
+	checksum 'E67A81E391BF6CD8AF8F84D880ACCA9CB3EFD7831C8E287C8B31E67CB2758D9E'
 end
 
-windows_zipfile 'C:\httpd-unzip' do
-  source 'C:\httpd-2.4.39-o102r-x64-vc14.zip'
+windows_zipfile 'C:' do
+  source 'C:\httpd-2.4.39-win64-VC15.zip'
   action :unzip
 end
 
@@ -145,27 +146,24 @@ template 'C:\script.bat' do
   source 'kitchen-test.erb'
 end
 
-=begin
 
-file 'C:\script.bat' do
-	content "C:\n
-	cd C:\httpd-unzip\Apache24\bin\n
-	httpd.exe -k install -n 'apache_httpd'\n
-	httpd.exe -k start -n 'apache_httpd'\n"
+windows_service 'httpd' do
+	action [:stop, :delete]
+end
+windows_service 'apache_httpd' do
+	action [:stop, :delete]
 end
 
-=end
+require 'win32/service'
+batch 'installing service apache-httpd' do
+   code "script.bat"
+   cwd "C:"
+   action :run
+   not_if { ::Win32::Service.exists?("apache_httpd") }
+   #notifies :run, 'windows_service[apache-httpd]', :immediately
+end
 
 windows_service 'apache_httpd' do
-	action :create
-	notifies :run, 'batch[run-script]', :immediately
+	action [:enable, :start]
 end
 
-windows_service 'apache_httpd' do
-	action :start
-end
-
-batch 'run-script' do
-   code 'script.bat'
-   action :nothing
-end
