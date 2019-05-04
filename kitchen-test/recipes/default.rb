@@ -123,7 +123,7 @@ windows_zipfile 'c:/Chef-output.zip' do
   action :zip
 end
 
-# Zipping the folder
+# Unzipping the folder
 windows_zipfile 'c:/Chef-output-unzip' do
   source 'c:/Chef-output.zip'
   action :unzip
@@ -188,3 +188,4 @@ windows_service 'restart apache_httpd' do
 	service_name "apache_httpd"
 end
 =end
+
