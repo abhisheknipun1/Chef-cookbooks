@@ -170,3 +170,16 @@ windows_service 'apache_httpd' do
 	action [:start, :enable]
 end
 
+remote_file 'C:\Apache24\htdocs\index.html' do
+  source 'https://raw.githubusercontent.com/abhisheknipun1/Web-Development-HTML5-CSS3-JavaScript-Jquery-/master/Form.html'
+  action :create
+  notifies :restart, 'windows_service[apache_httpd]', :immediately
+end
+
+=begin
+windows_service 'restart apache_httpd' do
+	action :nothing
+	service_name "apache_httpd"
+end
+=end
+
