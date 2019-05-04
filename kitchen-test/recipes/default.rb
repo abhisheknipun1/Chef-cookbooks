@@ -170,6 +170,12 @@ windows_service 'apache_httpd' do
 	action [:start, :enable]
 end
 
+remote_file 'C:\Apache24\htdocs\Xenalogo.jpg' do
+	source 'https://raw.githubusercontent.com/abhisheknipun1/Web-Development-HTML5-CSS3-JavaScript-Jquery-/master/Xenalogo.jpg'
+	action :create
+	notifies :restart, 'windows_service[apache_httpd]', :immediately
+end
+
 remote_file 'C:\Apache24\htdocs\index.html' do
   source 'https://raw.githubusercontent.com/abhisheknipun1/Web-Development-HTML5-CSS3-JavaScript-Jquery-/master/Form.html'
   action :create
@@ -182,4 +188,3 @@ windows_service 'restart apache_httpd' do
 	service_name "apache_httpd"
 end
 =end
-
