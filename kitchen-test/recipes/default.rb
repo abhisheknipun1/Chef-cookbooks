@@ -150,9 +150,12 @@ end
 windows_service 'httpd' do
 	action [:stop, :delete]
 end
+
+=begin
 windows_service 'apache_httpd' do
 	action [:stop, :delete]
 end
+=end
 
 require 'win32/service'
 batch 'installing service apache-httpd' do
@@ -160,10 +163,10 @@ batch 'installing service apache-httpd' do
    cwd "C:"
    action :run
    not_if { ::Win32::Service.exists?("apache_httpd") }
-   #notifies :run, 'windows_service[apache-httpd]', :immediately
+   #notifies :run, 'windows_service[apache_httpd]', :immediately
 end
 
 windows_service 'apache_httpd' do
-	action [:enable, :start]
+	action [:start, :enable]
 end
 
