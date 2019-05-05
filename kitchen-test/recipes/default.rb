@@ -198,7 +198,7 @@ end
 =end
 
 remote_file 'C:\LoginRegistrationForm.zip' do
-	source 'http://tympanus.net/Tutorials/LoginRegistrationForm/LoginRegistrationForm.zip'
+	source 'https://tympanus.net/Tutorials/LoginRegistrationForm/LoginRegistrationForm.zip'
 	action :create
 end
 
