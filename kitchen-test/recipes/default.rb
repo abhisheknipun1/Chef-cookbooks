@@ -137,10 +137,12 @@ remote_file 'C:\httpd-2.4.39-win64-VC15.zip' do
 	checksum 'E67A81E391BF6CD8AF8F84D880ACCA9CB3EFD7831C8E287C8B31E67CB2758D9E'
 end
 
+
 windows_zipfile 'C:' do
   source 'C:\httpd-2.4.39-win64-VC15.zip'
   action :unzip
 end
+
 
 template 'C:\script.bat' do
   source 'kitchen-test.erb'
@@ -170,22 +172,57 @@ windows_service 'apache_httpd' do
 	action [:start, :enable]
 end
 
+=begin
+
 remote_file 'C:\Apache24\htdocs\Xenalogo.jpg' do
 	source 'https://raw.githubusercontent.com/abhisheknipun1/Web-Development-HTML5-CSS3-JavaScript-Jquery-/master/Xenalogo.jpg'
 	action :create
 	notifies :restart, 'windows_service[apache_httpd]', :immediately
 end
 
+
+
 remote_file 'C:\Apache24\htdocs\index.html' do
-  source 'https://raw.githubusercontent.com/abhisheknipun1/Web-Development-HTML5-CSS3-JavaScript-Jquery-/master/Form.html'
+  source 'https://colorlib.com/etc/lf/Login_v3/index.html'
   action :create
   notifies :restart, 'windows_service[apache_httpd]', :immediately
 end
 
-=begin
+
+
 windows_service 'restart apache_httpd' do
 	action :nothing
 	service_name "apache_httpd"
+end
+
+=end
+
+remote_file 'C:\LoginRegistrationForm.zip' do
+	source 'http://tympanus.net/Tutorials/LoginRegistrationForm/LoginRegistrationForm.zip'
+	action :create
+end
+
+windows_zipfile 'C:' do
+  source 'C:\LoginRegistrationForm.zip'
+  action :unzip
+end
+
+template 'C:\copy.bat' do
+  source 'copy.erb'
+end
+
+batch 'copy directory' do
+   code "copy.bat"
+   cwd "C:"
+   action :run
+   notifies :restart, 'windows_service[apache_httpd]'
+end
+
+=begin
+remote_directory 'C:\Apache24\htdocs' do
+	source 'C:\LoginRegistrationForm'
+	action :create
+	notifies :restart, 'windows_service[apache_httpd]', :immediately
 end
 =end
 
