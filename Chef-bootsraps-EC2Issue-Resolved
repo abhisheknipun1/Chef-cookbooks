@@ -1,0 +1,6 @@
+# configure winrm for using knife winrm
+winrm set winrm/config/service/auth '@{Basic="true"}'
+winrm set winrm/config/service '@{AllowUnencrypted="true"}'
+set-item WSMan:\localhost\Client\allowunencrypted $true
+#turn off firewall
+Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
