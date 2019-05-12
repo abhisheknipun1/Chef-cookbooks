@@ -4,3 +4,6 @@ winrm set winrm/config/service '@{AllowUnencrypted="true"}'
 set-item WSMan:\localhost\Client\allowunencrypted $true
 #turn off firewall
 Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
+#again turn on the firewall on node
+
+#turn on outbound and inbound rule for winrm on workstation as well
